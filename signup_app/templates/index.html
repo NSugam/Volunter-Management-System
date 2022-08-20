@@ -1,0 +1,83 @@
+{% extends 'basic.html' %}
+
+{% block title %}Index Page{% endblock title %}
+
+{% block navbar_name %}HomePage{% endblock navbar_name %}
+
+{% block homeactive %}active{% endblock homeactive %}
+
+{% block head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+{% endblock head %}
+
+{% block body %}
+{% load static %}
+
+{% if user.is_authenticated %}
+<div class="row">
+    <div class="col-sm-5 ml-5 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{event.0.event_name}}</h4>
+                <p class="card-text">{{event.0.description}}</p>
+                <h6 class="card-text">Registration Fee: Rs.{{event.0.event_price}}</h6>
+                <form action="register/" method="POST">{% csrf_token %}
+                    <button type="submit" name="event_name" value="{{event.0.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% for i in event|slice:"1:"%}
+    <div class="col-sm-5 ml-5 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{i.event_name}}</h4>
+                <p class="card-text">{{i.description}}</p>
+                <h6 class="card-text">Registration Fee: Rs.{{i.event_price}}</h6>
+                <form action="register/" method="POST">{% csrf_token %}
+                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% else %}
+<div class="row ">
+    <div class="col-sm-5 ml-5 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{event.0.event_name}}</h4>
+                <p class="card-text">{{event.0.description}}</p>
+                <h6 class="card-text">Registration Fee: Rs.{{event.0.event_price}}</h6>
+                <form action="redirect_loginpage/" method="POST">{% csrf_token %}
+                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% for i in event|slice:"1:"%}
+    <div class="col-sm-5 ml-5 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{i.event_name}}</h5>
+                <p class="card-text">{{i.description}}</p>
+                <h6 class="card-text">Registration Fee: Rs.{{i.event_price}}</h6>
+                <form action="redirect_loginpage/" method="POST">{% csrf_token %}
+                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
+
+{% endblock body %}
+
+</html>
