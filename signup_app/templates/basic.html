@@ -73,16 +73,22 @@
   {% if user.is_authenticated %}
   <BR>
   <h2 align="center"> Welcome, {{request.user.first_name}}<BR>
-    <a href="/createevent/"><button type="button" class="btn btn-success">Create New Event</button></a>
-    <a href="/deleteevent/"><button type="button" class="btn btn-success">Delete an Event</button></a>
-  </h2>
-  <BR>
-  {% else %}
 
+    {% if user.is_superuser %}
+      <a href="/createevent/"><button type="button" class="btn btn-success">Create New Event</button></a>
+      <a href="/deleteevent/"><button type="button" class="btn btn-danger">Delete an Event</button></a>
+      
+      <BR>
+    {% else %}
+          <button type="button" class="btn btn-danger" disabled>Students cannot modify events</button>
+    {% endif %}
+
+  {% else %}
   <BR>
   <h2 align="center"> Want some fun ? Register Now ! </h2>
   <BR>
   {% endif %}
+</h2>
 
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class New_Event(models.Model):
+class Event_table(models.Model):
     event_id = models.AutoField
     event_name = models.CharField(max_length=20)
     description = models.CharField(max_length=200)

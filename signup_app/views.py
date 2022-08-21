@@ -1,17 +1,16 @@
-from pydoc import describe
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .helper import generateOTP
-from .models import New_Event
+from .models import Event_table
 
 def page404(request):
     return render(request,"404.html")
 
 def index(request):
-    event = New_Event.objects.all()
+    event = Event_table.objects.all()
     params={'event': event}
     return render (request,"index.html", params)
 
@@ -25,13 +24,12 @@ def createevent_page(request):
 def deleteevent_page(request):
     return render (request,"deleteevent.html")
 
-
 def addevent(request):
     if request.method == 'POST':
         event_name = request.POST['event_name']
         description = request.POST['description']
         event_price = request.POST['event_price'] 
-        new_event = New_Event()
+        new_event = Event_table()
         new_event.event_name = event_name
         new_event.description = description
         new_event.event_price = event_price
@@ -45,11 +43,11 @@ def deleteevent(request):
     if request.method == 'POST':
         event_name = request.POST['event_name']
 
-        if not New_Event.objects.filter(event_name = event_name):
+        if not Event_table.objects.filter(event_name = event_name):
             messages.success(request, "Event Name doesn't exist")
             return redirect(deleteevent_page)
 
-        delete_event = New_Event.objects.get(event_name=event_name)
+        delete_event = Event_table.objects.get(event_name=event_name)
         delete_event.delete()
         messages.success(request, 'Event has been deleted')
         return redirect(index)
