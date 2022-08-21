@@ -4,14 +4,16 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .helper import generateOTP
-from .models import Event_table
+from .models import Event_table, Registration
 
 def page404(request):
     return render(request,"404.html")
 
 def index(request):
+    username = request.user.username
     event = Event_table.objects.all()
-    params={'event': event}
+    registered = Registration.objects.filter(username = username)
+    params = {'event': event, 'registrations':registered}
     return render (request,"index.html", params)
 
 def redirect_loginpage(request):
@@ -19,10 +21,26 @@ def redirect_loginpage(request):
     return redirect(loginpage)
 
 def createevent_page(request):
-    return render (request,"createevent.html")
+    return render (request,"handle_event/createevent.html")
 
 def deleteevent_page(request):
-    return render (request,"deleteevent.html")
+    return render (request,"handle_event/deleteevent.html")
+
+def deregister(request):
+    if request.method == 'POST':
+        event_name = request.POST['event_name']
+
+        registration_table_data = Registration.objects.all()
+        for i in registration_table_data:
+            if i.username == request.user.username:
+                if i.event_name == event_name:
+                    delete_event_01 = Registration.objects.filter(event_name = i.event_name)
+                    delete_event = delete_event_01.get(username = i.username)
+                    delete_event.delete()
+                    messages.success(request, 'Sorry to hear that you have de-registered from an event')
+                    return redirect(index)
+
+    return render (request,"handle_event/deregister.html")
 
 def addevent(request):
     if request.method == 'POST':
@@ -54,24 +72,43 @@ def deleteevent(request):
     else:
         return render(page404)
 
-
 def register (request):
     if request.method == 'POST':
         event_name = request.POST['event_name']
-        params = {'event_name': event_name}
-        return render (request,"register.html", params)
+        event_table_data = Event_table.objects.all()
+        for i in event_table_data:
+            if i.event_name == event_name:
+                event_price = i.event_price
+
+        registration_table_data = Registration.objects.all()
+        for i in registration_table_data:
+            if i.username == request.user.username and i.event_name == event_name:
+                messages.success(request, 'You cannot register twice')
+                return redirect(index)
+
+        register_event = Registration()
+        register_event.username = request.user.username
+        register_event.firstname = request.user.first_name
+        register_event.event_name = event_name
+        register_event.event_price = event_price
+        register_event.save()
+
+        messages.success(request, 'Event has been registered')
+        
+        params = {'event_name':event_name, 'event_price':event_price}
+        return render (request,"handle_event/register.html", params)
 
     else:
         return redirect(page404)
 
 def loginpage(request):
-    return render (request,"loginpage.html")
+    return render (request,"login_signup/loginpage.html")
 
 def contactus_page(request):
     return render (request,"contactus.html")
 
 def forgotpass_page(request):
-    return render (request,"forgotpassword.html")
+    return render (request,"login_signup/forgotpassword.html")
 
 def dashboard_password(request):
     return render (request,"dashboard_password.html")

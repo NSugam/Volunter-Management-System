@@ -31,6 +31,7 @@ urlpatterns = [
     path('logout/', views.handlelogout, name="logout"),
     path('redirect_loginpage/', views.redirect_loginpage, name="loginpage"),
     path('register/', views.register, name="register"),
+    path('deregister/', views.deregister, name="deregister"),
     path('createevent/', views.createevent_page, name="createevent_page"),
     path('add_event/', views.addevent, name="addevent"),
     path('deleteevent/', views.deleteevent_page, name="deleteevent_page"),

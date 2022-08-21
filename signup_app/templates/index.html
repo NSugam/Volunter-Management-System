@@ -16,20 +16,29 @@
 
 {% if user.is_authenticated %}
 <div class="row">
-    <div class="col-sm-5 ml-5 mt-3">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">{{event.0.event_name}}</h4>
-                <p class="card-text">{{event.0.description}}</p>
-                <h6 class="card-text">Registration Fee: Rs.{{event.0.event_price}}</h6>
-                <form action="register/" method="POST">{% csrf_token %}
-                    <button type="submit" name="event_name" value="{{event.0.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
-                </form>
-            </div>
+    <div class="card border-dark mb-5 mx-auto" style="max-width: 18rem;">
+        <div class="card-header">Your Upcoming Registrations</div>
+        <div class="card-body text-dark">
+            {% for i in registrations %}
+            <h5 class="card-title">{{forloop.counter}}. {{i.event_name}}</h5>
+            {% endfor %}
+            <a href="/deregister/"><button type="button" class="btn btn-danger mx-auto">De-register</button></a>
         </div>
     </div>
+    <div class="card border-dark mb-5 mx-auto" style="max-width: 18rem;">
+        <div class="card-header">Already Participated Events List</div>
+        <div class="card-body text-dark">
 
-    {% for i in event|slice:"1:"%}
+            <h5 class="card-title">Feature Coming Soon</h5>
+
+            <a href="/deregister/"><button type="button" class="btn btn-danger mx-auto" disabled>Delete Data</button></a>
+        </div>
+    </div>
+</div>
+    
+    <h3 align="center">Hurry Up ! Upcoming Events to register</h3>
+<div class="row">
+    {% for i in event|slice:"0:"%}
     <div class="col-sm-5 ml-5 mt-3">
         <div class="card">
             <div class="card-body">
@@ -43,24 +52,11 @@
         </div>
     </div>
     {% endfor %}
-
 </div>
 
 {% else %}
 <div class="row ">
-    <div class="col-sm-5 ml-5 mt-3">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">{{event.0.event_name}}</h4>
-                <p class="card-text">{{event.0.description}}</p>
-                <h6 class="card-text">Registration Fee: Rs.{{event.0.event_price}}</h6>
-                <form action="redirect_loginpage/" method="POST">{% csrf_token %}
-                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
-                </form>
-            </div>
-        </div>
-    </div>
-    {% for i in event|slice:"1:"%}
+    {% for i in event|slice:"0:"%}
     <div class="col-sm-5 ml-5 mt-3">
         <div class="card">
             <div class="card-body">
@@ -68,7 +64,8 @@
                 <p class="card-text">{{i.description}}</p>
                 <h6 class="card-text">Registration Fee: Rs.{{i.event_price}}</h6>
                 <form action="redirect_loginpage/" method="POST">{% csrf_token %}
-                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
+                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register
+                        Now</button><BR><BR>
                 </form>
             </div>
         </div>
