@@ -135,8 +135,12 @@ def register (request):
         return redirect(page404)
 
 def loginpage(request):
-    return render (request,"login_signup/loginpage.html")
-
+    if request.user.is_authenticated:
+        messages.success(request, 'You are already logged In')
+        return redirect(index)
+    else:
+        return render (request,"login_signup/loginpage.html")
+        
 def contactus_page(request):
     return render (request,"contactus.html")
 
@@ -211,6 +215,7 @@ def Handlechangepass(request):
                 change_pswd.save()
                 messages.success(request, 'Password Changed ! You can now login')
                 del request.session['token']
+                logout(request)
                 return redirect(loginpage)
             else:
                 messages.error(request, 'Password Not Matched')
