@@ -16,34 +16,50 @@
 
 {% if user.is_authenticated %}
 <div class="row">
-    <div class="card border-dark mb-5 mx-auto" style="max-width: 18rem;">
-        <div class="card-header">Your Upcoming Registrations</div>
+    <div class="card border-dark mb-5 mx-auto" style="width: 18rem;">
+        <div class="card-header">Already Completed Events</div>
+        <div class="card-body text-dark">
+            {% for i in past_events %}
+            <h5 class="card-title">{{forloop.counter}}. {{i.event_name}}</h5>
+            <p class="card-title">{{i.event_date}}</p>
+            {% endfor %}
+            {% if user.is_superuser %}
+            <a href="/deleteevent/"><button type="button" class="btn btn-danger mx-auto">Delete Events Data</button></a>
+            {% else %}
+            <a href="#"><button type="button" class="btn btn-danger mx-auto" disabled>Delete Events Data</button></a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card border-dark mb-5 mx-auto" style="width: 18rem;">
+        <div class="card-header">Ongoing Events Today <BR>{{CurrentDate}}</div>
+        <div class="card-body text-dark">
+            {% for i in ongoing_events %}
+            <h5 class="card-title">{{forloop.counter}}. {{i.event_name}}</h5>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card border-dark mb-5 mx-auto" style="width: 18rem;">
+        <div class="card-header">Your Upcoming Registered Events</div>
         <div class="card-body text-dark">
             {% for i in registrations %}
             <h5 class="card-title">{{forloop.counter}}. {{i.event_name}}</h5>
             {% endfor %}
-            <a href="/deregister/"><button type="button" class="btn btn-danger mx-auto">De-register</button></a>
-        </div>
-    </div>
-    <div class="card border-dark mb-5 mx-auto" style="max-width: 18rem;">
-        <div class="card-header">Already Participated Events List</div>
-        <div class="card-body text-dark">
-
-            <h5 class="card-title">Feature Coming Soon</h5>
-
-            <a href="/deregister/"><button type="button" class="btn btn-danger mx-auto" disabled>Delete Data</button></a>
+            <a href="/deregister_page/"><button type="button" class="btn btn-danger mx-auto">De-register</button></a>
         </div>
     </div>
 </div>
     
     <h3 align="center">Hurry Up ! Upcoming Events to register</h3>
 <div class="row">
-    {% for i in event|slice:"0:"%}
+    {% for i in upcoming_events|slice:"0:"%}
     <div class="col-sm-5 ml-5 mt-3">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">{{i.event_name}}</h4>
-                <p class="card-text">{{i.description}}</p>
+                <p class="card-text"><i>{{i.description}}</i></p>
+                <h6 class="card-text">Event Date: {{i.event_date}}</h6>
                 <h6 class="card-text">Registration Fee: Rs.{{i.event_price}}</h6>
                 <form action="register/" method="POST">{% csrf_token %}
                     <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
@@ -56,12 +72,13 @@
 
 {% else %}
 <div class="row ">
-    {% for i in event|slice:"0:"%}
+    {% for i in upcoming_events|slice:"0:"%}
     <div class="col-sm-5 ml-5 mt-3">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{i.event_name}}</h5>
-                <p class="card-text">{{i.description}}</p>
+                <p class="card-text"><i>{{i.description}}</i></p>
+                <h6 class="card-text">Event Date: {{i.event_date}}</h6>
                 <h6 class="card-text">Registration Fee: Rs.{{i.event_price}}</h6>
                 <form action="redirect_loginpage/" method="POST">{% csrf_token %}
                     <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register

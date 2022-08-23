@@ -1,0 +1,51 @@
+{% extends 'basic.html' %}
+
+{% block title %}Index Page{% endblock title %}
+
+{% block navbar_name %}UserProfile{% endblock navbar_name %}
+
+{% block head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+{% endblock head %}
+
+{% block body %}
+{% load static %}
+
+<div style="text-align: center; font-size: 18px; font-weight: bold;">
+    <BR>
+    <form action="/update_details/" method="POST"> {% csrf_token %}
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Your Email</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="staticEmail"
+                    name="username" value="{{request.user.email}}">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="input" class="col-sm-2 col-form-label">First Name</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="first_name" value = {{request.user.first_name}}>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="input" class="col-sm-2 col-form-label">Last Name</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="last_name" value = {{request.user.last_name}}>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="input" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-5" style="text-align: left; font-size: 16px;">
+                <input type="password" class="form-control" value = "##########" disabled>
+                <a href="/dashboard_password/">Change password</a>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Update my Details</button>
+    </form>
+</div>
+
+{% endblock body %}
