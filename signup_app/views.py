@@ -1,3 +1,4 @@
+from turtle import home
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -7,10 +8,20 @@ from .helper import generateOTP
 from .models import Event_table, Registration
 from datetime import datetime,timedelta
 
+def testpage(request):
+    if request.user.is_authenticated:
+        messages.success(request, 'Thank you for your enquiry ! We will contact you as soon as possible.')
+        return redirect(index)
+        # return HttpResponse ("Got it")
+    else:
+        return redirect(redirect_loginpage)
+
+
 def page404(request):
     return render(request,"404.html")
 
 def index(request):
+    global event_table_data, past_events, ongoing_events, upcoming_events, registered
     username = request.user.username
     event_table_data = Event_table.objects.all()
     registered = Registration.objects.filter(username = username)
@@ -42,13 +53,57 @@ def createevent_page(request):
 
 def deleteevent_page(request):
     if request.user.is_superuser:
-        return render (request,"handle_event/deleteevent.html")
+        params = {'event': event_table_data}
+        return render (request,"handle_event/deleteevent.html", params)
     else:
         return redirect(page404)
 
+def modifyevent_page(request):
+    if request.user.is_superuser:
+        params = {'event': event_table_data}
+        return render (request,"handle_event/modifyevent.html", params)
+    else:
+        return redirect(page404)
+
+def modifyevent(request):
+    if request.method == 'POST':
+        event_name = request.POST['event_name']
+        event_name_filter = Event_table.objects.filter(event_name = event_name)
+        params = {'event_name_filter':event_name_filter}
+        return render (request,"handle_event/modifyevent1.html", params)
+
+def modifyevent_handle(request):
+    if request.user.is_authenticated:
+        event_name = request.POST['event_name']
+        event_price = request.POST['event_price']
+        event_date = request.POST['event_date']
+        try:
+            formatDate = datetime.strptime(event_date,"%b. %d, %Y")
+        except:
+            try:
+                formatDate = datetime.strptime(event_date,"%B %d, %Y")
+            except:
+                try:
+                    formatDate = datetime.strptime(event_date,"%Y-%m-%d")
+                except:
+                    messages.success(request, 'Date Format is Incorrect (YYYY-MM-DD IS REQUIRED)')
+                    return redirect (modifyevent_page)
+       
+            update_event = Event_table.objects.get(event_name = event_name)
+            update_event.event_name = event_name
+            update_event.event_price = event_price
+            update_event.event_date = formatDate
+            update_event.save()
+            messages.success(request, f'{event_name} Event has been modified')
+            return redirect(index)
+        
+
+
+
 def deregister_page(request):
     if request.user.is_authenticated:
-        return render (request,"handle_event/deregister.html")
+        params = {'registrations': registered}
+        return render (request,"handle_event/deregister.html",params)
     else:
         return redirect(page404)
 
@@ -100,7 +155,7 @@ def deleteevent(request):
 
         delete_event = Event_table.objects.get(event_name=event_name)
         delete_event.delete()
-        messages.success(request, 'Event has been deleted')
+        messages.success(request, f'{event_name} Event has been deleted')
         return redirect(index)
     else:
         return render(page404)

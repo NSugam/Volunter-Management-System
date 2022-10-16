@@ -1,8 +1,8 @@
 {% extends 'basic.html' %}
 
-{% block title %}De-registration{% endblock title %}
+{% block title %}Index Page{% endblock title %}
 
-{% block navbar_name %}De-Registration{% endblock navbar_name %}
+{% block navbar_name %}Modify Event{% endblock navbar_name %}
 
 {% block homeactive %}active{% endblock homeactive %}
 
@@ -15,16 +15,17 @@
 
 <div style="text-align: center; font-size: 20px; font-weight: bold;">
     <BR>
-    <form action="/deregister/" method="POST"> {% csrf_token %}
+    <form action="/modify_event_page/" method="POST"> {% csrf_token %}
         <div class="form-group row">
-            <label class="col-sm-3 col-form-label">Your registrations</label>
+            <label class="col-sm-3 col-form-label">Event Name</label>
             <select name="event_name" class="form-control col-sm-4 col-form-label">
-                {% for i in registrations %}
-                <option  value="{{i.event_name}}">{{i.event_name}}</option>
+                {% for i in event %}
+                <option  value="{{i.event_name}}">{{i.event_name}} || {{i.event_date}}</option>
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">De-register event</button>
+
+        <button type="submit" class="btn btn-primary mt-5">Modify Event Data</button>
     </form>
 </div>
 

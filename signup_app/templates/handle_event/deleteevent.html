@@ -2,7 +2,7 @@
 
 {% block title %}Index Page{% endblock title %}
 
-{% block navbar_name %}Delete Event Page{% endblock navbar_name %}
+{% block navbar_name %}Delete Event{% endblock navbar_name %}
 
 {% block homeactive %}active{% endblock homeactive %}
 
@@ -17,19 +17,14 @@
     <BR>
     <form action="/delete_event/" method="POST"> {% csrf_token %}
         <div class="form-group row">
-            <label for="staticEmail" class="col-sm-2 col-form-label">Your Email</label>
-            <div class="col-sm-5">
-                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
-                    value="{{request.user.email}}">
-            </div>
+            <label class="col-sm-3 col-form-label">Event Name</label>
+            <select name="event_name" class="form-control col-sm-4 col-form-label">
+                {% for i in event %}
+                <option  value="{{i.event_name}}">{{i.event_name}} || {{i.event_date}}</option>
+                {% endfor %}
+            </select>
         </div>
-        <div class="form-group row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">Event Name</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" placeholder="Event Name" name="event_name" required>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Delete this Event</button>
+        <button type="submit" class="btn btn-primary mt-5">Delete this Event</button>
     </form>
 </div>
 

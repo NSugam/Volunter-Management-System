@@ -19,6 +19,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="home"),
+    path('testpage/', views.testpage, name="testpage"),
     path('loginpage/', views.loginpage, name="loginpage"),
     path('contactus/', views.contactus_page, name="contactus_page"),
     path('loginpage/signup/', views.handlesignup, name="signup"),
@@ -38,8 +39,10 @@ urlpatterns = [
     path('add_event/', views.addevent, name="addevent"),
     path('deleteevent/', views.deleteevent_page, name="deleteevent_page"),
     path('delete_event/', views.deleteevent, name="deleteevent"),
+    path('modifyevent/', views.modifyevent_page, name="modifyevent_page"),
+    path('modify_event_page/', views.modifyevent, name="modifyevent"),
+    path('modify_event_handle/', views.modifyevent_handle, name="modifyevent_handle"),
     path('userprofile/', views.userprofile, name="userprofile"),
     path('update_details/', views.updatedetails, name="updatedetails"),
-
     path('404/', views.page404, name="page404"),
 ]

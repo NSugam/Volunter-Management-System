@@ -15,5 +15,30 @@
 <BR>
     <h2 align="center"> Feel free to contact us 24/7</h2>
 <BR>
+    <div style="text-align: center; font-size: 20px; font-weight: bold;">
+        <BR>
+        <form action="/testpage/" method="POST"> {% csrf_token %}
+            <div class="form-group row">
+                <label for="staticEmail" class="col-sm-3 col-form-label">Your Email</label>
+                <div class="col-sm-5">
+                    <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                        value="{{request.user.email}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Contact Number</label>
+                <div class="col-sm-5">
+                    <input type="number" class="form-control" placeholder="+91-0000-0000-00" name="contact_number" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Your Enquiry</label>
+                <div class="col-sm-5">
+                    <textarea class="form-control" name="enquiry_text" placeholder = "Reason for contacting us in details (less than 200 words)" rows="3"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-5">Submit Enquiry</button>
+        </form>
+    </div>
 
 {% endblock %}

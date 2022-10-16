@@ -2,7 +2,7 @@
 
 {% block title %}Index Page{% endblock title %}
 
-{% block navbar_name %}HomePage{% endblock navbar_name %}
+{% block navbar_name %}Event Management System{% endblock navbar_name %}
 
 {% block homeactive %}active{% endblock homeactive %}
 
@@ -17,7 +17,7 @@
 {% if user.is_authenticated %}
 <div class="row">
     <div class="card border-dark mb-5 mx-auto" style="width: 18rem;">
-        <div class="card-header">Already Completed Events</div>
+        <div class="card-header">Past Events</div>
         <div class="card-body text-dark">
             {% for i in past_events %}
             <h5 class="card-title">{{forloop.counter}}. {{i.event_name}}</h5>
@@ -26,7 +26,7 @@
             {% if user.is_superuser %}
             <a href="/deleteevent/"><button type="button" class="btn btn-danger mx-auto">Delete Events Data</button></a>
             {% else %}
-            <a href="#"><button type="button" class="btn btn-danger mx-auto" disabled>Delete Events Data</button></a>
+            <!-- <a href="#"><button type="button" class="btn btn-danger mx-auto" disabled>Delete Events Data</button></a> -->
             {% endif %}
         </div>
     </div>
@@ -41,10 +41,11 @@
     </div>
 
     <div class="card border-dark mb-5 mx-auto" style="width: 18rem;">
-        <div class="card-header">Your Upcoming Registered Events</div>
+        <div class="card-header">Your upcoming registrations</div>
         <div class="card-body text-dark">
             {% for i in registrations %}
             <h5 class="card-title">{{forloop.counter}}. {{i.event_name}}</h5>
+            <p class="card-title">{{i.event_date}}</p>
             {% endfor %}
             <a href="/deregister_page/"><button type="button" class="btn btn-danger mx-auto">De-register</button></a>
         </div>
@@ -58,11 +59,19 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">{{i.event_name}}</h4>
-                <p class="card-text"><i>{{i.description}}</i></p>
                 <h6 class="card-text">Event Date: {{i.event_date}}</h6>
-                <h6 class="card-text">Registration Fee: Rs.{{i.event_price}}</h6>
+                <h6 class="card-text">Registration Fee: Rs.{{i.event_price}}</h6><BR>
                 <form action="register/" method="POST">{% csrf_token %}
-                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-dark">Register Now</button><BR><BR>
+                    <button type="submit" name="event_name" value="{{i.event_name}}" class="btn btn-primary mr-3">Register Now</button>
+                    <button type="button" class="btn btn-outline-dark" 
+                    data-toggle="modal" 
+                    data-target="#exampleModal" 
+                    data-event_name="{{i.event_name}}"
+                    data-description="{{i.description}}"
+                    data-event_price="{{i.event_price}}"
+                    data-event_date="{{i.event_date}}">
+                        More Details
+                    </button><BR>
                 </form>
             </div>
         </div>
@@ -91,6 +100,51 @@
 </div>
 
 {% endif %}
+
+                        <!-------- Modal --------->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" 
+aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Title from script</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+          <div class="form-group">
+            <h5 class="modal-desc">Event description from java script</h5><BR>
+            <h7 class="modal-date">Event date from script</h7><BR>
+            <h7 class="modal-price">Event price from script</h7>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget)
+  var ename = button.data('event_name')  
+  var edescription = button.data('description')
+  var event_date = button.data('event_date')
+  var event_price = button.data('event_price')
+  var modal = $(this)
+  modal.find('.modal-title').text(ename + ' Event')
+  modal.find('.modal-desc').text(edescription)
+  modal.find('.modal-date').text('Event Date: ' + event_date)
+  modal.find('.modal-price').text('Event Price: ' + event_price)
+})
+</script>
+
+                            <!------ End Modal ------>
 
 {% endblock body %}
 

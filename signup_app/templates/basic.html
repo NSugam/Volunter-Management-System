@@ -32,7 +32,7 @@
           <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item {% block aboutactive %}  {% endblock aboutactive %}">
-          <a class="nav-link" href="contactus/">Contact Us</a>
+          <a class="nav-link" href="/contactus/">Contact Us</a>
         </li>
       </ul>
       <div class="ml-auto form-inline ">
@@ -72,14 +72,16 @@
 
   {% if user.is_authenticated %}
   <BR>
-  <h2 align="center"> Welcome, {{request.user.first_name}}<BR>
+  <div align="center"> 
 
     {% if user.is_superuser %}
       <a href="/createevent/"><button type="button" class="btn btn-success">Create New Event</button></a>
-      <a href="/deleteevent/"><button type="button" class="btn btn-danger">Delete an Event</button></a>
-      <BR>
+      <a href="/modifyevent/"><button type="button" class="btn btn-primary">Modify Event</button></a>
+      <a href="/deleteevent/"><button type="button" class="btn btn-danger">Delete Event</button></a>
+      <BR><BR>
     {% else %}
-          <button type="button" class="btn btn-danger" disabled>Students cannot modify events</button>
+          <!-- <button type="button" class="btn btn-danger" disabled>Students cannot modify events</button> -->
+          <BR>
     {% endif %}
 
   {% else %}

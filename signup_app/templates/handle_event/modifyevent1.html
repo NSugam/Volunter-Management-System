@@ -1,0 +1,51 @@
+{% extends 'basic.html' %}
+
+{% block title %}Index Page{% endblock title %}
+
+{% block navbar_name %}Modify Event{% endblock navbar_name %}
+
+{% block homeactive %}active{% endblock homeactive %}
+
+{% block head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+{% endblock head %}
+
+{% block body %}
+
+{% for i in event_name_filter %}
+<div style="text-align: center; font-size: 20px; font-weight: bold;">
+    Event Name cannot be modified<BR>Contact Admin for further modifications<BR>
+    <BR>
+    <form action="/modify_event_handle/" method="POST"> {% csrf_token %}
+        <div class="form-group row">
+            <label for="inputPassword" class="col-sm-3 col-form-label">Event Name</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="event_name" value="{{i.event_name}}" readonly>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputPassword" class="col-sm-3 col-form-label">Event Date</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control"  name="event_date" value="{{i.event_date}}" placeholder="YYYY-MM-DD" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Registration Price</label>
+            <div class="col-sm-5">
+                <input type="number" class="form-control" placeholder ="Enter the registration price" name="event_price" value="{{i.event_price}}" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="inputPassword" class="col-sm-3 col-form-label">Event Description</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control"  placeholder="Description for your event (less than 200 words)" name="description" value="{{i.description}}" required>
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary mt-5">Modify Event Data</button>
+    </form>
+</div>
+
+{% endblock body %}
